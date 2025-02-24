@@ -1,10 +1,10 @@
 # unifi
 
-Dev tools for UI/Unifi/Ubiquiti
+Tools for UI / Unifi / Ubiquiti
 
 ## uxg-6rd-tunnel.sh
 
-Tested by the author on a UXG-Max. I expect it'll work the same with the entire family: UXG-[Lite|Max|Pro|Enterprise].
+Tested by the author on a UXG-Max. I expect it'll work the same with the entire family: UXG-[Lite|Max|Pro|Enterprise] as well as their sibling Cloud Gateways (UCG-\*).
 
 To establish an IPv6 tunnel with Quantum in "Legacy Qwest" territory, we still 🙄 need to use a slow and ancient bit of technology called 6rd. After replacing my USG-3P, the commands I needed to run on my UXG-Max were:
 
@@ -17,7 +17,7 @@ ip link set 6rd up
 ip route add ::/0 via ::205.171.2.64 dev 6rd
 ```
 
-Simple, right? The dynamic bits of those commands are the public IPv4 address assigned by Quantum (174.21.137.73), the IPv4 derived IPv6 network prefix (2602:ae:1589:4900), and the devices eth4 and br0 which depend on how you cable up your router. The uxg-6rd-tunnel.sh logic is:
+Simple, right? The dynamic bits of those commands are the public IPv4 address assigned by Quantum (174.21.137.73), the IPv4 derived IPv6 network prefix (2602:ae:1589:4900), and the devices eth4 and br0 which depend on how the router is cabled up. The logic is:
 
 1. discover the public facing NIC (eth4 above)
 2. discover the currently assigned public IPv4 address
@@ -28,7 +28,7 @@ Simple, right? The dynamic bits of those commands are the public IPv4 address as
 
 ### dependencies
 
-On the C5500XK ONT that Quantum provided me, I plugged in a Cat6 to my M3 MacBook Air and a [uni ethernet adapter](https://www.amazon.com/dp/B077KXY71Q) and immediately hit 940 Mbps up and down. My Quantum installer took pictures of that USB-C adapter as apparently most can't reliably saturage a 1Gb pipe. My upgrade was done in 8 minutes, goodbye Quantum tech. 👋🏻 
+On the C5500XK ONT that Quantum provided me, I plugged in a Cat6 to my M3 MacBook Air and a [uni ethernet adapter](https://www.amazon.com/dp/B077KXY71Q) and immediately hit 940 Mbps up and down. My Quantum installer took pictures of that USB-C adapter as apparently most can't reliably saturage a 1Gb pipe. My upgrade was done in 8 minutes, goodbye friendly Quantum tech. 👋🏻 
 
 What's with this 192.168 address? The new ONT is a fiber modem AND a router. For now... On the label is the password for the `admin` user. I logged in, visited the `Advanced -> WAN` tab and switched to Transparent Bridging with VLAN 201 tagging (from memory, this part may be imprecise). The ONT rebooted itself and when it came back online my MBA got a public IP via plain old DHCP. 🎉 Hooray, no more PPPoE or VLAN tagging. Sadly, still no IPv6. ☹️
 
