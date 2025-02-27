@@ -66,6 +66,16 @@ fi
 
 ---
 
+## freebsd-6rd-tunnel.sh
+
+This script turns a vanilla FreeBSD server with at least (2) NICs into a router. It sets up a 6rd tunnel to Quantum (should be easily adaptible to other ISPs) and then shares that IPv6 connection with the LAN.
+
+Why? After getting IPv6 working with my UXG-Pro, I was disappointed in the firewall capabilities, so I dropped a NIC card into my FreeBSD file server and moved all the IPv6 over to it.
+
+You're on your own for setting up the firewall. I already had a complex set of PF rules that I integrated the IPv6 rules into.
+
+---
+
 ## usg-3p-6rd-tunnel.sh
 
 This is the script I used for years and years to get CenturyLink IPv6 working on my USG 3P gateway. I never did get it to work automatically when my IP changed (usually after a router reboot) and so I just logged into the console and ran this script.
