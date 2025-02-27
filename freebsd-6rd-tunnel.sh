@@ -88,6 +88,7 @@ assure_no_adv_on_lan()
     else
 	echo "MISSING: -accept_rtadvd on $LAN_DEV in /etc/rc.conf"
 	sysrc ifconfig_${LAN_DEV}_ipv6+=" -accept_rtadv"
+	ifconfig $LAN_DEV inet6 -accept_rtadv
     fi
 }
 
@@ -127,16 +128,17 @@ tunnel_destroy()
 
 tunnel_create()
 {
-    assure_forwarding
-    assure_no_adv_on_lan
-
     ifconfig $TUN_DEV create
     ifconfig $TUN_DEV inet6 $PUB_6_PREFIX:: prefixlen 24 up
     ifconfig $TUN_DEV stfv4net 0.0.0.0/32 stfv4br $IP6RD_ROUTER description Quantum-6rd-tunnel
     ifconfig $WAN_DEV inet6 $PUB_6_PREFIX::1/$IP6RD_PREFIX_LEN
     ifconfig $LAN_DEV inet6 $PUB_6_PREFIX:1::1/64
 
+    assure_forwarding
     route -6 add default -interface $TUN_DEV
+
+    assure_no_adv_on_lan
+    start_rtadvd
 }
 
 has_pub6_changed
