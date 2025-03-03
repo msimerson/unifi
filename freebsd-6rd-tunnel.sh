@@ -109,6 +109,14 @@ start_rtadvd()
     fi
 }
 
+reload_pf()
+{
+    if ! sysrc -c pf_enable=YES; then return; fi
+    PF_FILE=$(sysrc -n pf_rules)
+    if [ -z "$PF_FILE" ]; then PF_FILE=/etc/pf.conf; fi
+    pfctl -f $PF_FILE
+}
+
 tunnel_destroy()
 {
     if [ -n "$(netstat -rn6 | grep ^default)" ]; then
@@ -137,6 +145,7 @@ tunnel_create()
     assure_forwarding
     route -6 add default -interface $TUN_DEV
 
+    reload_pf
     assure_no_adv_on_lan
     start_rtadvd
 }
